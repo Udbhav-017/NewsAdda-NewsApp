@@ -2,9 +2,17 @@ import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 
 export default class Navbar extends Component {
+  state = {
+    word: ''
+  }
+
+  handleChange=(event)=>{
+    this.setState({word: event.target.value});
+  }
+
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-light " style={{"backgroundColor":"#e3f2fd"}}>
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top" style={{ "backgroundColor": "#e3f2fd" }}>
         <div className="container-fluid">
           <span className="navbar-brand text-primary">NewsAdda</span>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,10 +42,10 @@ export default class Navbar extends Component {
                 <Link className="nav-link" to="/entertainment">Entertainment</Link>
               </li>
             </ul>
-            <form className="d-flex">
-              <input className="form-control me-2" type="search" placeholder="Search news that includes.." aria-label="Search" />
-              <button className="btn btn-outline-primary" type="submit">Search</button>
-            </form>
+            <div className="d-flex">
+              <input className="form-control me-2" type="search" value={this.state.word} onChange={this.handleChange} placeholder="Search news related to..." aria-label="Search" />
+              <Link  to={`/:${this.state.word}`}> <button className="btn btn-outline-primary" onClick={()=>{this.props.getKeyword(this.state.word)}} >Search</button> </Link>
+            </div>
           </div>
         </div>
       </nav>

@@ -17,16 +17,18 @@ export default class News extends Component {
     }
 
     loadNews = async () => {
-        this.props.setProgress(15);
-        let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        if(this.state.page===1)this.props.setProgress(15);
+        let url;
+        if(this.props.keyword) url = `https://newsapi.org/v2/top-headlines?country=in&q=${this.props.keyword}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        else  url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         let data = await fetch(url);
-        this.props.setProgress(40);
+        if(this.state.page===1)this.props.setProgress(40);
         let dataParsed = await data.json();
-        this.setState({ articles: this.state.articles.concat(dataParsed.articles), totalArticles: dataParsed.totalResults })
-        this.props.setProgress(100);
+        this.setState({ articles: this.state.articles.concat(dataParsed.articles), totalArticles: dataParsed.totalResults });
+        if(this.state.page===1)this.props.setProgress(100);
     }
 
-    componentDidMount() {
+    componentDidMount(){
         this.loadNews();
     }
 
@@ -48,7 +50,7 @@ export default class News extends Component {
     render() {
         return (
             <>
-                <h2 className="m-4 text-center text-capitalize" style={{ 'fontFamily': 'Fira Sans'}}><strong>NewsAdda - latest happenings in India <span className="text-success">{this.props.category!=='general'?`- ${this.props.category}`:""}</span></strong></h2>
+                <h2 className="text-center text-capitalize" style={{fontFamily: 'Fira Sans', marginTop:'90px'}}><strong>NewsAdda - latest happenings in India <span className="text-success">{this.props.category!=='general'?`- ${this.props.category}`:""}</span></strong></h2>
 
                 <InfiniteScroll
                     dataLength={this.state.articles.length} //This is important field to render the next data
@@ -56,10 +58,11 @@ export default class News extends Component {
                     hasMore={this.state.articles.length !== this.state.totalArticles}
                     loader={<Spinner className='m-3' />}
                     endMessage={
-                        <p style={{ textAlign: 'center' }}>
-                            <b>Check after some time for more!!</b>
+                        <p style={{ textAlign: 'center', margin: '20px', color:'red' }}>
+                            <b>{this.state.articles.length? 'Check after some time for more!!':'No news found!! Try something different'}</b>
                         </p>
                     }>
+
                     <div className="container">
                         <div className="row">
                             {

@@ -11,11 +11,16 @@ export default class App extends Component {
   apiKey = process.env.REACT_APP_NEWS_API;
 
   state={
-    progress:0
+    progress:0,
+    keyword:''
   }
 
   setProgress = (progress) =>{
     this.setState({progress:progress})
+  }
+  
+  getKeyword = (keyword) =>{
+    this.setState({keyword:keyword})
   }
 
 
@@ -23,10 +28,12 @@ export default class App extends Component {
     return (
       <>
         <LoadingBar color='#f11946' progress= {this.state.progress}/>
-        <Navbar />
+        <Navbar getKeyword = {this.getKeyword}/>
           <Switch>
             <Route exact path="/">
-              <News  setProgress={this.setProgress} key="general" category="general" pageSize={this.pageSize} apiKey={this.apiKey} />
+              <News  setProgress={this.setProgress} key="general" category="general" pageSize={this.pageSize} apiKey={this.apiKey} />       
+                                               
+                                               {/* unique [Key] is used to force rerender component */}
             </Route>
             <Route exact path="/sports">
               <News  setProgress={this.setProgress} key="sports" category="sports" pageSize={this.pageSize} apiKey={this.apiKey} />
@@ -46,9 +53,10 @@ export default class App extends Component {
             <Route exact path="/technology">
               <News  setProgress={this.setProgress} key="technology" category="technology" pageSize={this.pageSize} apiKey={this.apiKey} />
             </Route>
-            {/* <Route>
-              <News  setProgress={setProgress} keyword={keyword} pageSize={this.pageSize} apiKey={this.apiKey} />
-            </Route> */}
+            <Route exact path='/:slug'>
+              <p>search</p>
+              <News  setProgress={this.setProgress} key={`${this.state.keyword}`} keyword={this.state.keyword} pageSize={this.pageSize} apiKey={this.apiKey} />
+            </Route>
           </Switch>
       </>
     )
