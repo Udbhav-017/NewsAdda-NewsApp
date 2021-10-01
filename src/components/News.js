@@ -17,10 +17,13 @@ export default class News extends Component {
     }
 
     loadNews = async () => {
+        this.props.setProgress(15);
         let url = `https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         let data = await fetch(url);
+        this.props.setProgress(40);
         let dataParsed = await data.json();
         this.setState({ articles: this.state.articles.concat(dataParsed.articles), totalArticles: dataParsed.totalResults })
+        this.props.setProgress(100);
     }
 
     componentDidMount() {
