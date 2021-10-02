@@ -50,7 +50,7 @@ export default class News extends Component {
     render() {
         return (
             <>
-                <h2 className="text-center text-capitalize" style={{fontFamily: 'Fira Sans', marginTop:'90px'}}><strong>NewsAdda - latest happenings in India <span className="text-success">{this.props.category!=='general'?`- ${this.props.category}`:""}</span></strong></h2>
+                <h2 className="text-center text-capitalize" style={{fontFamily: 'Fira Sans', marginTop:'90px'}}><strong>NewsAdda - latest happenings in India <span className="text-success">{(this.props.category!=='general')&&!this.props.keyword?`- ${this.props.category}`:""}</span></strong></h2>
 
                 <InfiniteScroll
                     dataLength={this.state.articles.length} //This is important field to render the next data
